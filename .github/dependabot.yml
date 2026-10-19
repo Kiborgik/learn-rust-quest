@@ -6,3 +6,7 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    ignore:
+      # Its refs are toolchains (`stable`, `1.88`), not versions. The msrv
+      # job pins 1.88 on purpose; bumping it would skip the check.
+      - dependency-name: dtolnay/rust-toolchain
