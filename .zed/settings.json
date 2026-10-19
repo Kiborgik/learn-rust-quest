@@ -1,0 +1,13 @@
+// Lets rust-analyzer check the exercise files (exercises/ is a separate
+// Cargo project generated on the first `cargo run`), and ignores starters/
+// (the pristine copies, broken on purpose; you work in exercises/).
+{
+  "lsp": {
+    "rust-analyzer": {
+      "initialization_options": {
+        "linkedProjects": ["Cargo.toml", "exercises/Cargo.toml"],
+        "files": { "exclude": ["starters"] }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+[package]
+name = "l25_04_transactions"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1"
+sqlx = { version = "0.8", default-features = false, features = ["runtime-tokio", "sqlite", "macros", "migrate"] }
+tokio = { version = "1", features = ["full"] }

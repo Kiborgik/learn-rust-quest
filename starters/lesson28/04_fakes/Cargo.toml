@@ -1,0 +1,4 @@
+[package]
+name = "l28_04_fakes"
+version = "0.1.0"
+edition = "2024"

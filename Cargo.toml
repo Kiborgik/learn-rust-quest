@@ -1,0 +1,21 @@
+[package]
+name = "rust-quest"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+description = "Learn Rust by fixing small broken programs, as a terminal game with XP, bosses and quizzes."
+license = "MIT"
+repository = "https://github.com/Kiborgik/learn-rust-quest"
+keywords = ["rust", "learn", "tutorial", "exercises", "game"]
+categories = ["command-line-utilities"]
+publish = false
+default-run = "quest"
+autobins = false
+
+# The game. Start it with `cargo run`.
+# Exercises are NOT part of this package: on first run the game copies them
+# from starters/ into exercises/ and generates exercises/Cargo.toml so your
+# editor can check them (see .zed/, .vscode/ and .helix/ settings).
+[[bin]]
+name = "quest"
+path = "src/main.rs"

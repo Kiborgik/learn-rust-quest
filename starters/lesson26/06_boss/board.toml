@@ -1,0 +1,4 @@
+# Config for guildboard-server. Every key is optional.
+addr = "127.0.0.1:3000"
+# A file database that survives restarts (mode=rwc creates it).
+database = "sqlite://board.db?mode=rwc"

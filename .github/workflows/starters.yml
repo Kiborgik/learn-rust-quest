@@ -1,0 +1,57 @@
+name: Starters
+
+# Checks that every starter fails as shipped, the way the game checks it.
+# Slow (it builds every quest and its crates), so it only runs when the
+# exercises or the code that checks them change, once a week (new crate
+# releases), or by hand.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "starters/**"
+      - "src/lessons/**"
+      - "src/exercises.rs"
+      - "src/runner.rs"
+      - "src/workspace.rs"
+      - "Cargo.toml"
+      - ".github/workflows/starters.yml"
+  pull_request:
+    paths:
+      - "starters/**"
+      - "src/lessons/**"
+      - "src/exercises.rs"
+      - "src/runner.rs"
+      - "src/workspace.rs"
+      - "Cargo.toml"
+      - ".github/workflows/starters.yml"
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+# A newer push to the same branch replaces a run still in progress.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  # No debug info for the quest builds: faster, and the cache is half the size.
+  CARGO_PROFILE_DEV_DEBUG: "0"
+  CARGO_PROFILE_TEST_DEBUG: "0"
+
+jobs:
+  starters:
+    strategy:
+      fail-fast: false
+      matrix:
+        # Linux on pushes; all three systems on the weekly and manual runs.
+        os: ${{ fromJSON((github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && '["ubuntu-latest","windows-latest","macos-latest"]' || '["ubuntu-latest"]') }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          cache-directories: target/starters
+      - run: cargo test -- --ignored

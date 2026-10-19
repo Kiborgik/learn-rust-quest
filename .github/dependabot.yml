@@ -1,0 +1,8 @@
+# Keeps the CI actions up to date. Crates are left alone: the game has
+# none, and quest crates use version ranges on purpose.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
