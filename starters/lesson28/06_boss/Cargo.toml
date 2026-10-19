@@ -1,0 +1,10 @@
+[package]
+name = "l28_06_boss"
+version = "0.1.0"
+edition = "2024"
+
+[dev-dependencies]
+insta = "1"
+mockall = "0.15"
+proptest = "1"
+rstest = "0.28"

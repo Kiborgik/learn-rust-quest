@@ -1,0 +1,9 @@
+/target
+/.quest
+# Your working copies, created from starters/ on first run.
+/exercises/
+# Leftovers from checking starter packages standalone.
+/starters/**/Cargo.lock
+/starters/**/proptest-regressions/
+/starters/**/*.pending-snap
+/starters/**/*.snap.new

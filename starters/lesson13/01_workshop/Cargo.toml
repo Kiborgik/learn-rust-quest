@@ -1,0 +1,4 @@
+[package]
+name = "l13_01_workshop"
+version = "0.1.0"
+edition = "2024"

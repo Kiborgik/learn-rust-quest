@@ -1,0 +1,7 @@
+[package]
+name = "l17_02_flags"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }

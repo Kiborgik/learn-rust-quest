@@ -1,0 +1,32 @@
+//! One module per lesson, each exporting `pub const LESSON: Lesson`.
+
+pub mod lesson01;
+pub mod lesson02;
+pub mod lesson03;
+pub mod lesson04;
+pub mod lesson05;
+pub mod lesson06;
+pub mod lesson07;
+pub mod lesson08;
+pub mod lesson09;
+pub mod lesson10;
+pub mod lesson11;
+pub mod lesson12;
+pub mod lesson13;
+pub mod lesson14;
+pub mod lesson15;
+pub mod lesson16;
+pub mod lesson17;
+pub mod lesson18;
+pub mod lesson19;
+pub mod lesson20;
+pub mod lesson21;
+pub mod lesson22;
+pub mod lesson23;
+pub mod lesson24;
+pub mod lesson25;
+pub mod lesson26;
+pub mod lesson27;
+pub mod lesson28;
+pub mod lesson29;
+pub mod lesson30;
