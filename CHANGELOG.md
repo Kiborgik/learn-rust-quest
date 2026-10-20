@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.2.0
+
+Run `git pull` and `cargo run` to update.
+
+- Fixed quests that used stuff from later lessons. The lesson 1 boss
+  needed `if` and loops, which only come in lesson 2. Went through all
+  30 lessons and fixed the rest.
+- Quests you haven't opened yet now update when you pull. Ones you
+  already worked on are left alone. If there's a newer version, the
+  quest tells you and `restore` gets it. Your old file goes to
+  `.quest/backup/`.
+
 ## 0.1.0
 
 First release.

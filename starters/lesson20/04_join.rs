@@ -23,6 +23,11 @@
 //   Never poll a future again after it returned Ready. That's why the
 //   Options double as "done" flags.
 //
+//   Two small tools for this:
+//
+//     this.a.as_mut().poll(cx)   // Pin<Box<A>> → Pin<&mut A>, then poll
+//     this.a_out.take()          // moves the value out, leaves None
+//
 //   No threads involved. This is CONCURRENCY (interleaving), not
 //   parallelism. One thread juggles many tasks, which is exactly what
 //   async runtimes do with thousands of network connections.

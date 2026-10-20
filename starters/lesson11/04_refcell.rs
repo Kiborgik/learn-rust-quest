@@ -14,6 +14,9 @@
 //     impl Counter {
 //         fn hit(&self) { self.hits.set(self.hits.get() + 1); }   // &self!
 //     }
+//     let c = Counter { hits: Cell::new(0) };
+//     c.hit();
+//     c.hits.get();                        // 1
 //
 //   `RefCell<T>` for anything: borrow() / borrow_mut():
 //

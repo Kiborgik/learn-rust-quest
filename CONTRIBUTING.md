@@ -70,6 +70,20 @@ From lesson 13, a quest can be a whole Cargo package instead of one file:
 - Checks must never start a real server or use the internet. Downloading
   crates on the first build is fine.
 
+## Changing a starter
+
+Players get improved starters on their next `cargo run` after a
+`git pull`: every file they never touched is replaced, and their own work is
+kept (the quest card offers `restore`). For that, every version of every
+starter must be listed in `src/starter_hashes.txt`. After changing or adding
+a starter, record it and commit the file:
+
+```sh
+UPDATE_STARTER_HASHES=1 cargo test
+```
+
+Plain `cargo test` (and CI) fails if you forget.
+
 ## Adding a lesson
 
 1. Write the files and `README.md` in `starters/lessonNN/`.

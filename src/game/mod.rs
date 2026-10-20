@@ -6,7 +6,7 @@ mod play;
 mod quiz;
 pub mod reset;
 
-use crate::exercises;
+use crate::exercises::{self, Exercise};
 use crate::progress::Progress;
 use crate::view;
 use std::io::{self, BufRead};
@@ -71,9 +71,22 @@ impl Game {
         }
     }
 
-    pub fn run(&mut self) {
+    /// `updated`: quests the start-up sync just refreshed, shown once
+    /// before the first quest so the player knows.
+    pub fn run(&mut self, updated: &[&Exercise]) {
         if self.first_run && !self.welcome() {
             return;
+        }
+        if !updated.is_empty() && !self.first_run {
+            crate::ui::clear();
+            view::quests_updated(updated);
+            println!(
+                "\n  {}",
+                crate::ui::bold(crate::ui::green("Press Enter to continue."))
+            );
+            if self.input.recv().is_err() {
+                return;
+            }
         }
         // A streak achievement can unlock just by starting the game today.
         self.check_achievements();

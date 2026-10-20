@@ -154,7 +154,7 @@ pub const LESSON: Lesson = Lesson {
                 "`let Armor { name, defense, .. } = armor; format!(\"{name}: {defense}\")`",
             ],
             quiz: Some(Quiz {
-                question: "Does this compile?\n\n    #[derive(Debug)]\n    struct S { a: String, b: u32 }\n    let x = S { a: \"hi\".into(), b: 1 };\n    let y = S { a: \"yo\".into(), ..x };\n    println!(\"{:?}\", x);",
+                question: "Does this compile?\n\n    #[derive(Debug)]\n    struct S { a: String, b: u32 }\n    let x = S { a: String::from(\"hi\"), b: 1 };\n    let y = S { a: String::from(\"yo\"), ..x };\n    println!(\"{:?}\", x);",
                 options: &[
                     "No: x was partially moved",
                     "Yes: only the u32 `b` was copied from x",

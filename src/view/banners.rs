@@ -143,6 +143,39 @@ pub fn bonus_lines(bonuses: &[(bool, String, u32)]) {
     }
 }
 
+/// After a `git pull`: which quests got a newer version. Only quests the
+/// player never touched are listed (their own work is never replaced).
+pub fn quests_updated(updated: &[&Exercise]) {
+    const SHOWN: usize = 8;
+    if updated.is_empty() {
+        return;
+    }
+    println!();
+    println!("  {}", bold(cyan("⬆ QUESTS IMPROVED")));
+    print_wrapped(
+        2,
+        &format!(
+            "{} quest(s) you hadn't started now have their newest version. \
+             Your own work was not touched.",
+            updated.len()
+        ),
+        dim,
+    );
+    for ex in updated.iter().take(SHOWN) {
+        println!(
+            "    {} {}",
+            dim(format!("{:<7}", ex.code_label())),
+            ex.title
+        );
+    }
+    if updated.len() > SHOWN {
+        println!(
+            "    {}",
+            dim(format!("...and {} more", updated.len() - SHOWN))
+        );
+    }
+}
+
 pub fn achievement_unlocked(a: &Achievement) {
     println!();
     println!(

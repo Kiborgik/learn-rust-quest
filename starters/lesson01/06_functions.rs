@@ -24,6 +24,10 @@
 //   You can also leave early with `return value;`, but idiomatic Rust
 //   prefers the expression style for the final value.
 //
+//   Any `{ }` block works the same way: its last expression is its value.
+//
+//         let v = { let a = 2; a * 3 };   // v = 6
+//
 // 🎯 YOUR TASK
 //
 //   1. Fix `damage`.

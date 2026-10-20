@@ -84,8 +84,7 @@ pub const LESSON: Lesson = Lesson {
                 "No indexing into strings. `name.chars().next()` gives an `Option<char>`; \
                  add `.unwrap_or('?')`.",
                 "`.len()` counts bytes. `s.chars().count()` counts characters.",
-                "`s.chars().rev().collect()` builds a String from reversed chars \
-                 (or loop and `push` each char).",
+                "`let mut out = String::new(); for c in s.chars().rev() { out.push(c); } out`",
                 "Acronym: `let mut out = String::new(); for w in phrase.split_whitespace() { \
                  if let Some(c) = w.chars().next() { out.push(c.to_ascii_uppercase()); } } out`",
             ],
@@ -137,7 +136,7 @@ pub const LESSON: Lesson = Lesson {
                  g.entry(w.len()).or_insert_with(Vec::new).push(w.to_string()); } g`",
             ],
             quiz: Some(Quiz {
-                question: "What does this print?\n\n    let mut m = HashMap::new();\n    for c in \"abca\".chars() {\n        *m.entry(c).or_insert(10) += 1;\n    }\n    println!(\"{}\", m[&'a']);",
+                question: "What does this print?\n\n    let mut m = HashMap::new();\n    for w in [\"a\", \"b\", \"c\", \"a\"] {\n        *m.entry(w).or_insert(10) += 1;\n    }\n    println!(\"{}\", m[\"a\"]);",
                 options: &["2", "11", "12", "1"],
                 answer: 2,
                 explain: "The first 'a' inserts 10, then adds 1. The second 'a' adds 1 again: 12.",
@@ -157,8 +156,8 @@ pub const LESSON: Lesson = Lesson {
                 "`insert` returns `true` when the value is NEW. A duplicate is when it \
                  returns `false`: `if !seen.insert(*r)`.",
                 "HashMap iteration order is random. Switch `counts` to `BTreeMap::new()`.",
-                "`let set: BTreeSet<u32> = values.iter().copied().collect(); \
-                 set.into_iter().collect()`, or insert each value in a loop.",
+                "`let mut set = BTreeSet::new(); for v in values { set.insert(*v); }` \
+                 then `let mut out = Vec::new(); for v in set { out.push(v); } out`",
             ],
             quiz: Some(Quiz {
                 question: "What does this print?\n\n    let mut s = BTreeSet::new();\n    for n in [3, 1, 3, 2] { s.insert(n); }\n    println!(\"{:?}\", s);",

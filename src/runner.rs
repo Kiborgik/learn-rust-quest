@@ -152,8 +152,9 @@ fn check_cargo(ex: &Exercise, pkg: &Path) -> Outcome {
             .arg("--manifest-path")
             .arg(pkg.join("Cargo.toml"))
             .args(["--quiet", "--color=always"]);
-        // Pristine starters build standalone; keep their output in target/.
-        if pkg.starts_with(root().join("starters")) {
+        // The player's packages share the exercises/ workspace. Anything else
+        // (starter copies checked by the tests) shares one target dir.
+        if !pkg.starts_with(root().join("exercises")) {
             c.arg("--target-dir")
                 .arg(root().join("target").join("starters"));
         }

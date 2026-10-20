@@ -33,9 +33,9 @@ There is no `s[i]`, because UTF-8 characters vary in size.
 ```rust
 use std::collections::HashMap;
 let mut m: HashMap<String, u32> = HashMap::new();
-m.insert("a".into(), 1);
+m.insert(String::from("a"), 1);
 m.get("a");                              // Option<&u32>
-*m.entry("b".into()).or_insert(0) += 1;  // count / upsert
+*m.entry(String::from("b")).or_insert(0) += 1;  // count / upsert
 if let Some(v) = m.get_mut("a") { *v += 1; }
 ```
 

@@ -54,6 +54,15 @@ impl Exercise {
         self.code == "BOSS"
     }
 
+    /// "2-3", or "2-BOSS" so bosses of different lessons can be told apart.
+    pub fn code_label(&self) -> String {
+        if self.is_boss() {
+            format!("{}-BOSS", self.lesson)
+        } else {
+            self.code.to_string()
+        }
+    }
+
     /// XP for passing: a revealed hint halves it.
     pub fn reward(&self, used_hint: bool) -> u32 {
         if used_hint { self.xp / 2 } else { self.xp }

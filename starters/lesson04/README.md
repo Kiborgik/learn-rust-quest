@@ -25,7 +25,7 @@ impl Monster {
     const MAX_HP: u32 = 999;
 
     // Monster::new(..)
-    fn new(name: &str) -> Self { Self { name: name.into(), hp: 10 } }
+    fn new(name: &str) -> Self { Self { name: name.to_string(), hp: 10 } }
     fn is_alive(&self) -> bool { self.hp > 0 }       // read
     // modify
     fn hit(&mut self, d: u32) { self.hp = self.hp.saturating_sub(d); }

@@ -15,6 +15,13 @@
 //     v.iter().chain(other.iter())           // one after the other
 //     v.iter().take(2)  .skip(2)  .rev()     // first 2 / skip 2 / backwards
 //     v.iter().copied()                      // &u32 → u32 (for Copy types)
+//     (1..=3).map(|x| x * 2)                 // ranges work too
+//
+//   `enumerate` and `zip` yield TUPLES. A closure can unpack a tuple
+//   right in its parameter list:
+//
+//     names.iter().enumerate().map(|(i, name)| format!("{i}={name}"))
+//     // "0=Ferris", "1=Corro", ...
 //
 //   Then COLLECT the result into a collection:
 //

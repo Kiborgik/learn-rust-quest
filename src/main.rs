@@ -17,6 +17,7 @@ mod progress;
 mod rewards;
 mod runner;
 mod ui;
+mod versions;
 mod view;
 mod workspace;
 
@@ -47,20 +48,21 @@ fn main() {
     let (flags, args): (Vec<String>, Vec<String>) =
         env::args().skip(1).partition(|a| a == "--plain");
     ui::init(!flags.is_empty());
-    match workspace::init() {
-        Ok(0) => {}
-        Ok(n) => println!(
-            "{}",
-            dim(format!("Set up {n} exercise file(s) in exercises/."))
-        ),
+    let synced = match workspace::init() {
+        Ok(s) => s,
         Err(e) => {
             eprintln!("{} {e}", red("Could not set up the exercises/ folder:"));
             return;
         }
+    };
+    if synced.created > 0 {
+        let msg = format!("Set up {} exercise file(s) in exercises/.", synced.created);
+        println!("{}", dim(msg));
     }
     match args.first().map(String::as_str) {
         Some("reset") => reset(args.get(1).is_some_and(|a| a == "--yes" || a == "-y")),
         Some("map" | "list") => {
+            view::quests_updated(&synced.updated);
             let p = Progress::load();
             view::header(&p);
             view::map(&p);
@@ -71,7 +73,7 @@ fn main() {
             }
             println!("\nBackups go to {}/.", workspace::BACKUP_DIR);
         }
-        _ => game::Game::new().run(),
+        _ => game::Game::new().run(&synced.updated),
     }
 }
 

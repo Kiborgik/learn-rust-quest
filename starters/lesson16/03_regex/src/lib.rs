@@ -19,6 +19,8 @@
 //
 //   Quick reference:  \d digit  \w word char  \s space  + one or more
 //   * zero or more  ? optional  ^ start  $ end  [abc] one of  (..) group
+//   \. \( \[ \{  a backslash makes a special character literal:
+//   r"\(crit\)" matches the text "(crit)"
 //
 //   Rust's regex crate guarantees linear time: no catastrophic
 //   backtracking, even on hostile input. The price: no backreferences or

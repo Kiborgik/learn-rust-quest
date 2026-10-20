@@ -86,9 +86,7 @@ impl Game {
 /// Deterministic Fisher-Yates shuffle of `0..n`, seeded by the exercise id
 /// (FNV-1a + xorshift), so a quiz always shows the same order.
 fn shuffled_order(id: &str, n: usize) -> Vec<usize> {
-    let mut state = id.bytes().fold(0xcbf2_9ce4_8422_2325u64, |h, b| {
-        (h ^ b as u64).wrapping_mul(0x0100_0000_01b3)
-    }) | 1;
+    let mut state = crate::versions::fnv1a(id.as_bytes()) | 1;
     let mut order: Vec<usize> = (0..n).collect();
     for i in (1..n).rev() {
         state ^= state << 13;

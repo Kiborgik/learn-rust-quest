@@ -107,7 +107,8 @@ pub const LESSON: Lesson = Lesson {
             hints: &[
                 "`let trimmed = name.trim(); if trimmed.chars().any(char::is_uppercase) { Cow::Owned(trimmed.to_lowercase()) } \
                  else { Cow::Borrowed(trimmed) }`",
-                "escape: `if !text.contains(['&', '<', '>']) { return Cow::Borrowed(text); }`",
+                "escape: `if !(text.contains('&') || text.contains('<') || text.contains('>')) \
+                 { return Cow::Borrowed(text); }`",
                 "Then `Cow::Owned(text.replace('&', \"&amp;\").replace('<', \"&lt;\").replace('>', \"&gt;\"))`. \
                  Replace & first!",
             ],
@@ -192,7 +193,7 @@ pub const LESSON: Lesson = Lesson {
             xp: 400,
             hints: &[
                 "Builder fields: `guild: Option<String>, max_size: Option<usize>`. build: \
-                 `self.guild.filter(|g| !g.trim().is_empty()).ok_or(RosterError::NoGuildName)?`",
+                 `let guild = self.guild.unwrap_or_default();` and NoGuildName if `guild.trim().is_empty()`.",
                 "recruit: check `contains` first (AlreadyIn), then `len() >= max_size` (Full), then push and `Ok(self)`.",
                 "Display: `write!(f, \"{}:\", self.guild)?;` then `\" {}\"` with `self.members.join(\", \")` if any.",
                 "FromStr: `s.split_once(':')`, build with the trimmed guild, then recruit each trimmed, non-empty \

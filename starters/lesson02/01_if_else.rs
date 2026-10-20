@@ -18,6 +18,10 @@
 //         if 1 { }        // ✘ ERROR: expected `bool`, found integer
 //         if hp != 0 { }  // ✔
 //
+//   Combine conditions with `&&` (and), `||` (or) and `!` (not):
+//         if hp > 0 && hp < 20 { }     // both must be true
+//         if hp == 0 || hp > 999 { }   // at least one is true
+//
 //   `if` is an EXPRESSION: it produces a value (like `?:` in C/Java/JS):
 //
 //     let label = if hp < 50 { "weak" } else { "strong" };

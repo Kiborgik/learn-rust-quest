@@ -27,6 +27,9 @@
 //     ($x:expr) => { ... };
 //     ($x:expr, $($rest:expr),+) => { ... };
 //
+//   A rule may also use the macro itself on the rest, passing the
+//   repetition on: `shout_all!($($rest),+)`. (Quest 27-5 shows more.)
+//
 // 🎯 YOUR TASK
 //
 //   1. `hashmap!` breaks on a trailing comma. Allow one.

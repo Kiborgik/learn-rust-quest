@@ -14,14 +14,23 @@
 //   ⚔️  HEAD 1: `Config` from TOML (lesson 15). Missing keys use the
 //        defaults (addr "127.0.0.1:3000", database "sqlite::memory:").
 //        Unknown keys are an error, so a typo can't go unnoticed.
+//        (Lesson 15: `#[serde(default)]` on the struct, and the
+//        struct attribute `deny_unknown_fields` for the typos.)
 //
 //   ⚔️  HEAD 2: `start`: open the Store, bind a TcpListener on
 //        config.addr, and serve the API in a spawned task. `url` is
 //        "http://" + the address it really got (port 0 = any free port).
+//        `listener.local_addr()?` tells you that address.
 //
 //   ⚔️  HEAD 3: `stop`: graceful shutdown. Tell the server to stop
-//        (a tokio oneshot channel works well), then wait for its task.
-//          axum::serve(listener, app).with_graceful_shutdown(async { rx.await.ok(); })
+//        (a tokio oneshot channel works well, lesson 21), then wait
+//        for its task. In the task:
+//          axum::serve(listener, app)
+//              .with_graceful_shutdown(async { rx.await.ok(); })
+//              .await
+//        That gives a `std::io::Result<()>`, so the task is a
+//        `JoinHandle<std::io::Result<()>>`. Awaiting the handle wraps
+//        it once more (Err if the task panicked): `handle.await??`.
 //
 //   ⚔️  HEAD 4: startup errors say what failed: context "opening the
 //        database" and "binding <addr>".

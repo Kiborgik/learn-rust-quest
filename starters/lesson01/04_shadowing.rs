@@ -17,6 +17,8 @@
 //     variable. It can even have a DIFFERENT TYPE than the old one.
 //   • `mut` is different: it changes the SAME variable, and the type
 //     can never change.
+//   • A shadow inside a `{ }` block only lasts until that block's `}`.
+//     After it, the outer variable is visible again.
 //   • `.parse()` can turn text into many types (u8, i32, f64, ...), so
 //     Rust needs you to say which one you want.
 //   • `.trim()` removes surrounding whitespace, `.expect("msg")` crashes

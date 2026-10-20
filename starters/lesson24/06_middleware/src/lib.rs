@@ -16,6 +16,11 @@
 //         res
 //     }
 //
+//   The Response can be changed on its way out, for example a header:
+//
+//     let mut res = next.run(req).await;
+//     res.headers_mut().insert("x-hi", HeaderValue::from_static("hi"));
+//
 //   Return early to stop the request (here `Result<Response, StatusCode>`;
 //   the Err becomes the response):
 //

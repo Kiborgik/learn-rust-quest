@@ -11,6 +11,7 @@
 
 use crate::exercises::{self, Exercise};
 use crate::runner::{EDITION, root};
+use crate::versions::{Versions, content_hash, is_known_starter, was_revised};
 use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
@@ -130,28 +131,86 @@ fn editor_manifest() -> String {
     s
 }
 
-/// First-run setup, safe to call on every start. Copies the starter of every
-/// exercise that doesn't exist yet (never overwrites the learner's work) and
-/// keeps `exercises/Cargo.toml` in sync with the catalogue.
-/// Returns how many exercise files were created.
-pub fn init() -> io::Result<usize> {
-    let mut created = 0;
+/// What `init` did to the exercise files.
+pub struct Synced {
+    /// New files copied from `starters/`.
+    pub created: usize,
+    /// Exercises whose untouched files were replaced by an improved starter.
+    pub updated: Vec<&'static Exercise>,
+}
+
+/// Setup and sync, run on every `cargo run`:
+/// - copies the starter of every exercise file that doesn't exist yet,
+/// - after a `git pull`, replaces every file the learner never touched
+///   (it still matches a starter version we shipped) with the new one,
+/// - never overwrites the learner's work (`has_update` flags those),
+/// - keeps `exercises/Cargo.toml` in sync with the catalogue.
+pub fn init() -> io::Result<Synced> {
+    let mut versions = Versions::load();
+    let mut synced = Synced {
+        created: 0,
+        updated: Vec::new(),
+    };
     for ex in exercises::all() {
         for file in exercise_files(ex)? {
+            let starter = read(&root().join(STARTERS).join(&file))?;
             let target = root().join(EXERCISES).join(&file);
-            if !target.exists() {
-                write(&target, &read(&root().join(STARTERS).join(&file))?)?;
-                created += 1;
+            let current = match fs::read(&target) {
+                Ok(c) => c,
+                Err(e) if e.kind() == io::ErrorKind::NotFound => {
+                    write(&target, &starter)?;
+                    versions.set(&file, &starter);
+                    synced.created += 1;
+                    continue;
+                }
+                Err(e) => return Err(e),
+            };
+            let now = content_hash(&current);
+            if now != content_hash(&starter) {
+                let untouched = versions.get(&file) == Some(now) || is_known_starter(&file, now);
+                if !untouched {
+                    continue;
+                }
+                write(&target, &starter)?;
+                if !synced.updated.iter().any(|e| e.id == ex.id) {
+                    synced.updated.push(ex);
+                }
             }
+            versions.set(&file, &starter);
         }
     }
+    versions.save()?;
     let manifest = root().join(EXERCISES).join("Cargo.toml");
     let wanted = editor_manifest();
     // Only write when it changed, so the editor doesn't reload for nothing.
     if fs::read_to_string(&manifest).ok().as_deref() != Some(wanted.as_str()) {
         write(&manifest, wanted.as_bytes())?;
     }
-    Ok(created)
+    Ok(synced)
+}
+
+/// True if the learner edited this exercise and its starter has improved
+/// since they got it: `restore` brings the new version (theirs is backed up).
+pub fn has_update(ex: &Exercise) -> bool {
+    let versions = Versions::load();
+    exercise_files(ex).unwrap_or_default().iter().any(|f| {
+        let (Ok(current), Ok(starter)) = (
+            fs::read(root().join(EXERCISES).join(f)),
+            fs::read(root().join(STARTERS).join(f)),
+        ) else {
+            return false;
+        };
+        let new = content_hash(&starter);
+        if content_hash(&current) == new {
+            return false;
+        }
+        match versions.get(f) {
+            Some(base) => base != new,
+            // Edited in a save from before versions were recorded: it came
+            // from an older starter if this one was ever revised.
+            None => was_revised(f),
+        }
+    })
 }
 
 /// Like `fs::read`, but the error names the file.
@@ -171,8 +230,9 @@ fn backup_path(rel: &Path) -> PathBuf {
 }
 
 /// Puts one file back to its starter version. Returns whether it changed.
-fn restore_file(rel: &Path) -> io::Result<bool> {
+fn restore_file(rel: &Path, versions: &mut Versions) -> io::Result<bool> {
     let starter = read(&root().join(STARTERS).join(rel))?;
+    versions.set(rel, &starter);
     let target = root().join(EXERCISES).join(rel);
     match fs::read(&target) {
         Ok(current) if current == starter => return Ok(false),
@@ -188,10 +248,17 @@ fn restore_file(rel: &Path) -> io::Result<bool> {
 /// the learner added to the package are moved to the backup folder.
 /// Returns `false` if nothing had to change.
 pub fn restore(ex: &Exercise) -> io::Result<bool> {
+    let mut versions = Versions::load();
+    let changed = restore_with(ex, &mut versions)?;
+    versions.save()?;
+    Ok(changed)
+}
+
+fn restore_with(ex: &Exercise, versions: &mut Versions) -> io::Result<bool> {
     let wanted = exercise_files(ex)?;
     let mut changed = false;
     for rel in &wanted {
-        changed |= restore_file(rel)?;
+        changed |= restore_file(rel, versions)?;
     }
     if let Some(pkg) = package_rel(ex) {
         for extra in files_under(&root().join(EXERCISES).join(pkg))? {
@@ -220,12 +287,14 @@ pub fn restore_all() -> io::Result<usize> {
             ),
         ));
     }
+    let mut versions = Versions::load();
     let mut changed = 0;
     for ex in exercises::all() {
-        if restore(ex)? {
+        if restore_with(ex, &mut versions)? {
             changed += 1;
         }
     }
+    versions.save()?;
     Ok(changed)
 }
 
@@ -254,7 +323,7 @@ mod tests {
             "rustc not found on PATH"
         );
         let passes =
-            |ex: &Exercise| matches!(check_file(ex, &starter_file(ex)), Outcome::Pass { .. });
+            |ex: &Exercise| matches!(check_file(ex, &staged_starter(ex)), Outcome::Pass { .. });
         let (cargo, single): (Vec<&Exercise>, Vec<&Exercise>) =
             exercises::all().partition(|ex| ex.check.is_cargo());
         let passing = Mutex::new(Vec::new());
@@ -285,6 +354,32 @@ mod tests {
         );
     }
 
+    /// The file to check for this exercise's starter. Cargo packages are
+    /// copied to `target/starter-check/` first, so building them can't leave
+    /// `Cargo.lock` or test-tool files inside `starters/`. Only changed
+    /// files are written, so cargo doesn't rebuild what it already built.
+    fn staged_starter(ex: &Exercise) -> PathBuf {
+        let Some(pkg) = package_rel(ex) else {
+            return starter_file(ex);
+        };
+        let stage = root().join("target").join("starter-check");
+        let (from, to) = (root().join(STARTERS).join(pkg), stage.join(pkg));
+        let wanted = files_under(&from).unwrap();
+        for f in &wanted {
+            let data = fs::read(from.join(f)).unwrap();
+            if fs::read(to.join(f)).ok().as_ref() != Some(&data) {
+                write(&to.join(f), &data).unwrap();
+            }
+        }
+        // Drop files a starter no longer has.
+        for f in files_under(&to).unwrap() {
+            if !wanted.contains(&f) {
+                fs::remove_file(to.join(f)).unwrap();
+            }
+        }
+        stage.join(rel_path(ex))
+    }
+
     #[test]
     fn exercise_ids_are_unique() {
         // They become `[[bin]]` names in the generated manifest.
@@ -312,5 +407,50 @@ mod tests {
                 starter.display()
             );
         }
+    }
+
+    /// Every starter version must be in `src/starter_hashes.txt`, or players
+    /// who `git pull` later can't tell it apart from their own edits.
+    /// After changing a starter: `UPDATE_STARTER_HASHES=1 cargo test`.
+    /// `STARTERS_DIR=<dir>` records an older copy of `starters/` instead.
+    #[test]
+    fn every_starter_version_is_recorded() {
+        use crate::versions::{HISTORY_FILE, history_line};
+        let dir = std::env::var_os("STARTERS_DIR").map_or(root().join(STARTERS), PathBuf::from);
+        let mut missing = Vec::new();
+        for ex in exercises::all() {
+            for rel in exercise_files(ex).unwrap() {
+                let Ok(data) = fs::read(dir.join(&rel)) else {
+                    continue; // an older copy may not have this file
+                };
+                if !is_known_starter(&rel, content_hash(&data)) {
+                    missing.push(history_line(&rel, &data));
+                }
+            }
+        }
+        if missing.is_empty() {
+            return;
+        }
+        if std::env::var_os("UPDATE_STARTER_HASHES").is_none() {
+            panic!(
+                "{} starter version(s) not recorded. Run `UPDATE_STARTER_HASHES=1 cargo test` \
+                 and commit {HISTORY_FILE}.\n{}",
+                missing.len(),
+                missing.join("\n")
+            );
+        }
+        let path = root().join(HISTORY_FILE);
+        let mut lines: Vec<String> = fs::read_to_string(&path)
+            .unwrap()
+            .lines()
+            .map(String::from)
+            .collect();
+        lines.extend(missing);
+        // Sorted by path, then hash, so diffs stay small and readable.
+        lines.sort_by(|a, b| {
+            (a.split_once(' ').map(|s| s.1), a).cmp(&(b.split_once(' ').map(|s| s.1), b))
+        });
+        lines.dedup();
+        fs::write(&path, lines.join("\n") + "\n").unwrap();
     }
 }

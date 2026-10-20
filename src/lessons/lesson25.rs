@@ -179,8 +179,8 @@ pub const LESSON: Lesson = Lesson {
                 "add_hero: `match sqlx::query(..).execute(&self.pool).await { Ok(done) => Ok(done.last_insert_rowid()), \
                  Err(sqlx::Error::Database(e)) if e.is_unique_violation() => Err(StoreError::Duplicate(name.into())), \
                  Err(e) => Err(e.into()) }`",
-                "Reuse the insert in add_party: make it a fn taking `impl sqlx::SqliteExecutor<'_>`, \
-                 so it accepts `&self.pool` and `&mut *tx`.",
+                "Reuse the insert in add_party: make it a fn taking `impl sqlx::SqliteExecutor<'_>` \
+                 (quest 25-4), so it accepts `&self.pool` and `&mut *tx`.",
                 "leaderboard: `SELECT h.name, COUNT(i.id) FROM heroes h LEFT JOIN items i ON i.hero_id = h.id \
                  GROUP BY h.id ORDER BY COUNT(i.id) DESC, h.name`",
             ],

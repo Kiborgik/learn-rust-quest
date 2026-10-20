@@ -45,8 +45,8 @@ pub const LESSON: Lesson = Lesson {
             xp: 175,
             hints: &[
                 "The panic says captures use `{capture}`: the route is `\"/heroes/{id}\"`.",
-                "`q.name` is an `Option<String>`. `q.name.as_deref().unwrap_or(\"stranger\")` gives a &str.",
-                "`format!(\"Hello, {}!\", q.name.as_deref().unwrap_or(\"stranger\"))`",
+                "`q.name` is an `Option<String>`. `unwrap_or` gives a String either way.",
+                "`format!(\"Hello, {}!\", q.name.unwrap_or(\"stranger\".to_string()))`",
             ],
             quiz: Some(Quiz {
                 question: "A handler takes `Path(id): Path<u32>`. The request is /heroes/abc. What happens?",
@@ -185,7 +185,8 @@ pub const LESSON: Lesson = Lesson {
                 "Routes: `.route(\"/quests\", get(list).post(create))`, \
                  `.route(\"/quests/{id}\", get(one).delete(remove))`, \
                  `.route(\"/quests/{id}/done\", patch(finish))`, then `.with_state(Board::default())`.",
-                "list: `Query(f): Query<Filter>` and filter with `f.done.is_none_or(|d| q.done == d)`.",
+                "list: `Query(f): Query<Filter>` and keep a quest when \
+                 `f.done.is_none() || f.done == Some(q.done)`.",
                 "create returns `Result<(StatusCode, Json<Quest>), ApiError>`; remove returns \
                  `Result<StatusCode, ApiError>` with `StatusCode::NO_CONTENT`.",
             ],

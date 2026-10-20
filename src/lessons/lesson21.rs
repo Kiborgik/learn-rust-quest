@@ -189,7 +189,8 @@ pub const LESSON: Lesson = Lesson {
                  tokio::spawn(async move { let _permit = sem.acquire_owned().await.unwrap(); deliver(p).await })`",
                 "Collect the handles in a Vec, then await them in order: \
                  `for h in handles { out.push(h.await.unwrap()); }`",
-                "timeout: `timeout(Duration::from_secs(max_secs), deliver(p.clone())).await.unwrap_or_else(|_| Err(format!(\"parcel {} timed out\", p.id)))`",
+                "timeout: `match timeout(Duration::from_secs(max_secs), deliver(p.clone())).await \
+                 { Ok(r) => r, Err(_) => Err(format!(\"parcel {} timed out\", p.id)) }`",
                 "fastest: spawn `async move { deliver(p).await; id }` into a JoinSet, then \
                  `set.join_next().await.map(|r| r.unwrap())`. Dropping the set cancels the rest.",
             ],

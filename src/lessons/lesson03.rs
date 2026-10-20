@@ -108,7 +108,7 @@ pub const LESSON: Lesson = Lesson {
                  Move the `println!` above the `push_str`.",
             ],
             quiz: Some(Quiz {
-                question: "Does this compile?\n\n    let mut s = String::from(\"a\");\n    let r1 = &s;\n    let r2 = &s;\n    println!(\"{r1}{r2}\");\n    let r3 = &mut s;\n    r3.push('b');",
+                question: "Does this compile?\n\n    let mut s = String::from(\"a\");\n    let r1 = &s;\n    let r2 = &s;\n    println!(\"{r1}{r2}\");\n    let r3 = &mut s;\n    r3.push_str(\"b\");",
                 options: &[
                     "No: r1 and r2 conflict",
                     "No: r3 conflicts with r1",

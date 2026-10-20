@@ -17,14 +17,16 @@
 //
 //     struct Knight;
 //     impl Greet for Knight {
-//         fn name(&self) -> String { "Sir Crab".into() }
+//         fn name(&self) -> String { String::from("Sir Crab") }
 //         // greet() comes from the default
 //     }
 //
 //     struct Pirate;
 //     impl Greet for Pirate {
-//         fn name(&self) -> String { "Redclaw".into() }
-//         fn greet(&self) -> String { "Arr!".into() }  // override
+//         fn name(&self) -> String { String::from("Redclaw") }
+//         fn greet(&self) -> String {               // override
+//             String::from("Arr!")
+//         }
 //     }
 //
 //   This is how Rust shares behaviour without inheritance: a default

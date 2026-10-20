@@ -54,7 +54,7 @@ pub const LESSON: Lesson = Lesson {
                  Ok(n) => Ok(n), Err(_) => Err(\"not a number\".to_string()) }`",
             ],
             quiz: Some(Quiz {
-                question: "What does this print?\n\n    let r: Result<u32, String> = \"8\".parse::<u32>()\n        .map_err(|e| e.to_string());\n    match r {\n        Ok(n) if n > 5 => println!(\"big\"),\n        Ok(_) => println!(\"small\"),\n        Err(e) => println!(\"{e}\"),\n    }",
+                question: "What does this print?\n\n    let r: Result<u32, _> = \"8\".parse();\n    match r {\n        Ok(n) if n > 5 => println!(\"big\"),\n        Ok(_) => println!(\"small\"),\n        Err(e) => println!(\"{e}\"),\n    }",
                 options: &["small", "8", "an error message", "big"],
                 answer: 3,
                 explain: "\"8\" parses to Ok(8), and the guard 8 > 5 holds.",
@@ -83,11 +83,11 @@ pub const LESSON: Lesson = Lesson {
                     "In any function",
                     "Only in `main`",
                     "In a function returning `Option<u32>`",
-                    "In a function returning a `Result` whose error type can be built from ParseIntError",
+                    "In a function returning `Result<T, ParseIntError>`",
                 ],
                 answer: 3,
-                explain: "`?` returns the error early, converting it with `From`, so the \
-                          function's return type must be able to hold it.",
+                explain: "`?` returns the error early, so the function's return type must be \
+                          able to hold it. (Quest 7-6 shows how other error types can too.)",
             }),
         },
         Exercise {
@@ -136,8 +136,8 @@ pub const LESSON: Lesson = Lesson {
                 question: "Which trait gives a type `.to_string()` and `{}` formatting?",
                 options: &["Debug", "Display", "Error", "ToOwned"],
                 answer: 1,
-                explain: "Implementing `Display` enables `{}`, and `.to_string()` comes \
-                          for free through a blanket impl.",
+                explain: "Implementing `Display` enables `{}`, and the standard library \
+                          then gives you `.to_string()` for free.",
             }),
         },
         Exercise {
@@ -168,8 +168,8 @@ pub const LESSON: Lesson = Lesson {
                     "The error's Debug form is printed and the process exits with a non-zero code",
                 ],
                 answer: 3,
-                explain: "`main` can return `Result<(), E>` where E: Debug. On Err it prints \
-                          `Error: {e:?}` and exits with code 1.",
+                explain: "`main` can return `Result<(), E>` if E can be printed with `{:?}`. \
+                          On Err it prints `Error: ` and the Debug form, then exits with code 1.",
             }),
         },
         Exercise {

@@ -32,6 +32,7 @@
 //        "sold", "3", "apple". The item is the 3rd word (`.nth(2)`).
 //
 //   💎 BONUS: `log(&self) -> &[String]` returns the log as a slice.
+//        (`&self.log` turns into a `&[String]` on its own.)
 //
 //   Your code goes here ↓
 

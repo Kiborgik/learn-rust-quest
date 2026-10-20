@@ -22,7 +22,11 @@
 //     for word in "a b  c".split_whitespace() { }   // "a", "b", "c"
 //     for part in "a,b,c".split(',') { }            // "a", "b", "c"
 //
+//     let mut out = String::new();     // build text char by char
+//     for c in "abc".chars() { out.push(c); }
+//
 //     "Hi".to_uppercase();   "Hi".to_lowercase();   "  x ".trim();
+//     'q'.to_ascii_uppercase();    // 'Q' (one char)
 //     "dragon".contains("rag");   "dragon".starts_with("dr");
 //     "a-b".replace("-", "+");    // "a+b"
 //

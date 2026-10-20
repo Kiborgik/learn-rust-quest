@@ -149,8 +149,8 @@ pub const LESSON: Lesson = Lesson {
                     "Add for Gold",
                 ],
                 answer: 1,
-                explain: "A blanket impl gives `Into<U> for T` whenever `U: From<T>`, which \
-                          is why you should implement `From` rather than `Into`.",
+                explain: "The standard library gives `Into<Gold> for u32` for free once \
+                          `From<u32> for Gold` exists. So implement `From`, not `Into`.",
             }),
         },
         Exercise {
@@ -198,9 +198,10 @@ pub const LESSON: Lesson = Lesson {
                  format!(\"{} ({} mana)\", self.name(), self.mana_cost()) } }`",
                 "Fireball cast: `target.hp = target.hp.saturating_sub(self.power);` \
                  Heal: `target.hp = (target.hp + self.amount).min(target.max_hp);`",
-                "cheapest: `let mut best: Option<&S> = None; for s in spells { if best.map_or(true, \
-                 |b| s.mana_cost() < b.mana_cost()) { best = Some(s); } } best`",
-                "Display: `let lines: Vec<String> = ...describe()...; write!(f, \"{}\", lines.join(\"\\n\"))`",
+                "cheapest: `if spells.is_empty() { return None; } let mut best = &spells[0]; \
+                 for s in spells { if s.mana_cost() < best.mana_cost() { best = s; } } Some(best)`",
+                "Display: `let mut lines = Vec::new(); for s in &self.spells { \
+                 lines.push(s.describe()); } write!(f, \"{}\", lines.join(\"\\n\"))`",
             ],
             quiz: Some(Quiz {
                 question: "When should you prefer `Box<dyn Trait>` over generics?",

@@ -25,6 +25,9 @@
 //   Cargo.toml needs the derive feature:
 //     serde = { version = "1", features = ["derive"] }
 //
+//   The tests write JSON as RAW strings: `r#"..."#`. Inside, `"` and
+//   `\` are plain characters, so `r#"{"a":1}"#` is the text {"a":1}.
+//
 // 🎯 YOUR TASK
 //
 //   1. Make `Hero` and `Item` serializable.

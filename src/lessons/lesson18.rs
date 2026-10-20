@@ -180,8 +180,8 @@ pub const LESSON: Lesson = Lesson {
             check: Check::CargoTest,
             xp: 400,
             hints: &[
-                "Head 1 is 18-3's census, with `flat_map_iter(|t| t.split_whitespace())` (or a loop \
-                 inside fold) and `.to_lowercase()`.",
+                "Head 1 is 18-3's census. Inside fold, loop over the words: \
+                 `for w in t.split_whitespace() { *m.entry(w.to_lowercase()).or_insert(0) += 1; }`.",
                 "`stars.par_iter().max_by_key(|s| s.brightness)` and \
                  `stars.par_iter().filter(|s| s.brightness >= min).map(|s| s.name.as_str()).collect()`",
                 "mandel: `(0..size).into_par_iter().map(|row| (0..size).filter(|&col| inside(col, row)).count()).sum()` \

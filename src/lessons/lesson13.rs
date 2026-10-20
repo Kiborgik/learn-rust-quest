@@ -181,7 +181,8 @@ pub const LESSON: Lesson = Lesson {
             xp: 350,
             hints: &[
                 "Head 1: add `pub mod tower;` to lib.rs. Head 2: \
-                 `(sides >= 2).then_some(Die { sides })` and `rng.random_range(1..=self.sides)`.",
+                 `if sides >= 2 { Some(Die { sides }) } else { None }` and \
+                 `rng.random_range(1..=self.sides)`.",
                 "parse: `let text = text.trim(); if text.is_empty() { return Err(Empty) }` then \
                  `let (count, rest) = text.split_once('d').ok_or(ParseError::MissingD)?;`",
                 "Split the bonus: `match rest.find(['+', '-']) { Some(i) => (&rest[..i], &rest[i..]), \

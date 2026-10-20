@@ -46,11 +46,11 @@ struct Wolf;
 struct Mouse;
 
 impl Creature for Wolf {
-    fn name(&self) -> String { "Wolf".into() }
+    fn name(&self) -> String { String::from("Wolf") }
     fn volume(&self) -> u32 { 90 }
 }
 impl Creature for Mouse {
-    fn name(&self) -> String { "Mouse".into() }
+    fn name(&self) -> String { String::from("Mouse") }
     fn volume(&self) -> u32 { 5 }
 }
 

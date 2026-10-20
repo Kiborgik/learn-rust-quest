@@ -20,6 +20,12 @@
 //
 //   Empty array of slots: `[const { MaybeUninit::uninit() }; N]`.
 //
+//   `const N: usize` is a CONST GENERIC: a number as a type parameter.
+//   `ArrayStack<String, 4>` holds up to 4 Strings. Inside the impl, N
+//   is a plain usize (`if self.len == N`). Every impl names it again:
+//
+//     impl<T, const N: usize> Drop for ArrayStack<T, N> { ... }
+//
 //   ⚔️  HEAD 1: `new`, `len`, `push` (Err(value) back when full),
 //        `pop`, `peek`.
 //   ⚔️  HEAD 2: `as_slice`: the filled part as &[T]. The filled slots sit

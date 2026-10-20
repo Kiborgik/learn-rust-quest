@@ -34,6 +34,16 @@
 //     let is_fire = matches!(spell, Spell::Fire(_));
 //     let is_big  = matches!(spell, Spell::Fire(p) if p > 10);
 //
+//   A `for` loop over a slice gives a REFERENCE to each item:
+//
+//     fn count_big(nums: &[u32]) -> u32 {
+//         let mut c = 0;
+//         for n in nums {                  // n: &u32
+//             if *n > 10 { c += 1; }
+//         }
+//         c
+//     }
+//
 // 🎯 YOUR TASK
 //
 //   1. `describe_drop`: use `if let`.

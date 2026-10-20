@@ -6,6 +6,7 @@ use crate::progress::Progress;
 use crate::rewards::{RANKS, rank_index};
 use crate::runner::{self, test_counts};
 use crate::ui::*;
+use crate::workspace;
 
 /// Rank, XP, quests and streak, then the bar to the next rank.
 pub fn header(p: &Progress) {
@@ -98,6 +99,15 @@ pub fn quest_card(ex: &Exercise, p: &Progress, hints_shown: usize) {
         )
     });
     println!("  {}", dim(format!("fix it, save, it's checked{notes}")));
+    if workspace::has_update(ex) {
+        println!();
+        print_wrapped(
+            2,
+            "⬆ This quest was improved since you started it. Type restore \
+             for the new version (yours is backed up first).",
+            cyan,
+        );
+    }
     for (i, hint) in ex.hints.iter().take(hints_shown).enumerate() {
         println!();
         println!("  {}", yellow(format!("💡 Hint {}", i + 1)));

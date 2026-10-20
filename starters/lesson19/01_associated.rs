@@ -30,6 +30,13 @@
 //
 //   Bounds on it: `fn f<C: Container<Item = String>>(c: &C)`.
 //
+//   Traits can hold ASSOCIATED CONSTS too (lesson 4 put them on impls).
+//   Each impl sets the value; generic code reads it through the type:
+//
+//     trait Monster { const DANGER: u32; }
+//     impl Monster for Slime { const DANGER: u32 = 1; }
+//     fn danger<M: Monster>() -> u32 { M::DANGER }  // or Slime::DANGER
+//
 // 🎯 YOUR TASK
 //
 //   1. `Backpack` doesn't say what it holds. Complete its impl.

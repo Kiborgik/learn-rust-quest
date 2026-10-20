@@ -12,9 +12,17 @@
 //   ⚔️  HEAD 1: `deliver_all(parcels, couriers) -> Vec<Result<..>>`
 //        Deliver every parcel, at most `couriers` at the same time.
 //        Results in the order of `parcels`.
-//        Tip: `tokio::sync::Semaphore` with `couriers` permits. Each
-//        spawned task takes a permit (`acquire_owned().await`) before
-//        delivering. Keep the JoinHandles in order and await them in order.
+//        Tip: a `Semaphore` hands out a fixed number of permits. Put it
+//        in an Arc, give each spawned task a clone, and take a permit
+//        before delivering. A task without one waits in `acquire`:
+//
+//            let sem = Arc::new(Semaphore::new(2));    // 2 permits
+//            let sem2 = sem.clone();                   // for one task
+//            let permit = sem2.acquire_owned().await.unwrap();
+//            // ... at most 2 tasks are here at the same time ...
+//            drop(permit);         // or let it drop at the end
+//
+//        Keep the JoinHandles in order and await them in order.
 //
 //   ⚔️  HEAD 2: timing. 6 parcels of distance 1 with 3 couriers take 2
 //        seconds; with 1 courier, 6.
@@ -24,8 +32,14 @@
 //
 //   ⚔️  HEAD 4: `fastest(parcels) -> Option<u32>`: deliver all at once
 //        and return the id of the first one to finish (the others are
-//        cancelled). Tip: `tokio::task::JoinSet`: spawn into it, then
-//        `join_next().await` gives the first finished task.
+//        cancelled). Tip: a `JoinSet` holds many spawned tasks:
+//
+//            let mut set = JoinSet::new();
+//            set.spawn(async move { 7 });       // like tokio::spawn
+//            set.join_next().await   // Some(Ok(7)): first to finish;
+//                                    // None if the set is empty
+//
+//        Dropping the set cancels the tasks that are still running.
 //
 //   ⚔️  HEAD 5: `summary(results) -> String`:
 //        "3 delivered, 1 failed" (all tests use plural forms)

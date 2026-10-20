@@ -33,6 +33,11 @@
 //   Accepting closures:  `impl Fn(..)` ⊂ `impl FnMut(..)` ⊂ `impl FnOnce(..)`
 //   (an Fn closure can go anywhere an FnMut or FnOnce is expected)
 //
+//   Calling an FnMut changes it, so an FnMut PARAMETER needs `mut`,
+//   just like the `let mut tick` binding above:
+//
+//     fn call_thrice(mut f: impl FnMut()) { f(); f(); f(); }
+//
 // 🎯 YOUR TASK
 //
 //   1. Fix `count_hits` (the closure modifies a captured variable).

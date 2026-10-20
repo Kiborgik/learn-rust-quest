@@ -28,8 +28,16 @@
 //   | unique values                  | HashSet   |
 //   | unique and sorted              | BTreeSet  |
 //
-//   Building a Vec from a set: `let v: Vec<u32> = set.into_iter().collect();`
-//   (iterators are lesson 9, but this one-liner is handy already)
+//   A set (or map) can be looped over like a Vec. A B-tree set gives
+//   its values in sorted order:
+//
+//     let mut v = Vec::new();
+//     for n in sorted { v.push(n); }    // Vec<u32>, sorted
+//
+//   `join` glues a list of strings together with a separator:
+//
+//     let parts = vec![String::from("a"), String::from("b")];
+//     parts.join(", ");                 // "a, b"
 //
 // 🎯 YOUR TASK
 //

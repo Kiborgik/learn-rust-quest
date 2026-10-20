@@ -17,6 +17,7 @@
 //   • `for` is how you loop over anything iterable. There's no C-style
 //     `for (i = 0; i < n; i++)`. Ranges replace it.
 //   • `return` exits the whole function early, even from inside a loop.
+//   • `print!` is `println!` without the line break at the end.
 //
 //   🆕 `todo!()` is a placeholder macro: the code compiles, but panics
 //   ("not yet implemented") if it runs. Replace each one with real code.

@@ -11,6 +11,7 @@ let state = if hp < 50 { "weak" } else { "strong" };  // like ?: in C/JS
 
 - No parentheses around the condition; braces are mandatory.
 - The condition **must** be `bool` (`if 1 {}` is an error).
+- Combine conditions with `&&` (and), `||` (or) and `!` (not).
 - Both branches must have the same type.
 
 ## 2. `loop` with a value

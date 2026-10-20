@@ -46,8 +46,10 @@ pub const LESSON: Lesson = Lesson {
             xp: 175,
             hints: &[
                 "split loses `total % n` coins. Give one extra coin to each of the first `total % n` heroes.",
-                "`let (share, extra) = (total / n, total % n); (0..n).map(|i| share + u32::from(i < extra)).collect()`",
-                "clamp_level: `as u8` cuts big numbers. Clamp first, convert after: `level.clamp(1, 99) as u8`.",
+                "`let (share, extra) = (total / n, total % n); \
+                 (0..n).map(|i| if i < extra { share + 1 } else { share }).collect()`",
+                "clamp_level: `as u8` cuts big numbers. Clamp first, convert after: \
+                 `level.max(1).min(99) as u8`.",
             ],
             quiz: Some(Quiz {
                 question: "What does proptest's SHRINKING give you?",
@@ -161,7 +163,7 @@ pub const LESSON: Lesson = Lesson {
                 "HEAD 2: `d.gold * weeks` overflows u32. Do the math in u64: \
                  `let gold = d.gold as u64; gold + gold * weeks as u64 / 100`",
                 "HEAD 3: wrap the announce in `if gold >= BIG_DEPOSIT { ... }`.",
-                "HEAD 4: `sorted.sort_by(|a, b| (a.day, &a.hero).cmp(&(b.day, &b.hero)));`",
+                "HEAD 4: `sorted.sort_by(|a, b| a.day.cmp(&b.day).then(a.hero.cmp(&b.hero)));`",
             ],
             quiz: Some(Quiz {
                 question: "In debug builds, what happens when u32 arithmetic overflows?",

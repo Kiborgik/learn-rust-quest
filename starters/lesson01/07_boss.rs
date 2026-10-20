@@ -6,6 +6,10 @@
 //   perfectly-typed function. No starter code, just the tests below.
 //   Read the tests: they show the exact names, types and expected values.
 //
+//   Everything here uses only this lesson: arithmetic, casts, arrays,
+//   tuples and functions. No `if`, no loops (those come in lesson 2).
+//   Each function body is a single expression.
+//
 //   ⚔️  HEAD 1: `xp_to_next_level(level: u32) -> u32`
 //        A hero needs level × level × 100 XP to reach the next level.
 //          level 1 → 100,  level 3 → 900
@@ -27,9 +31,11 @@
 //   ⚔️  HEAD 5: `critical_hit(base: u8, multiplier: u8) -> u8`
 //        base × multiplier, but a u8 can't hold more than 255:
 //        cap it there instead of overflowing.  (200, 2) → 255
+//        Quest 1-5 showed a method that stops at the max for you.
 //
 //   ⚔️  HEAD 6: `average_damage(hits: [u32; 4]) -> f64`
 //        The average of four hits, WITH the fraction:  [1, 2, 3, 4] → 2.5
+//        Read each hit by index (`hits[0]`...), add, then convert.
 //
 //   💎 BONUS HEAD: `dodge(pos: (i32, i32)) -> (i32, i32)`
 //        Dodging swaps your coordinates: (2, 7) → (7, 2)

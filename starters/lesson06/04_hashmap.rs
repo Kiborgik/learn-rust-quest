@@ -11,6 +11,7 @@
 //
 //     prices.get("apple");          // Option<&u32>: Some(&3)
 //     prices.get("pear");           // None
+//     prices["apple"];             // 3, PANICS if it's missing
 //     prices.contains_key("apple"); // true
 //     prices.remove("apple");       // Option<u32>: the removed value
 //     prices.len();

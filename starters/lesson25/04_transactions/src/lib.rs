@@ -19,6 +19,15 @@
 //   error, a panic), everything in it is ROLLED BACK. So `?` inside a
 //   transaction is exactly what you want.
 //
+//   A helper that works with BOTH a pool and a transaction takes any
+//   SQLite executor (`use sqlx::SqliteExecutor;`):
+//
+//     async fn add(db: impl SqliteExecutor<'_>, name: &str) -> ... {
+//         sqlx::query("...").bind(name).execute(db).await
+//     }
+//     add(&pool, "Ferris").await?;     // on its own
+//     add(&mut *tx, "Lumi").await?;    // inside a transaction
+//
 //   The table has a CHECK rule: `gold >= 0`. A change that breaks it
 //   fails with a database error.
 //

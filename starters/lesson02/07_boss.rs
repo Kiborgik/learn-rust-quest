@@ -14,6 +14,7 @@
 //   ⚔️  HEAD 2: `collatz_steps(n: u64) -> u32`
 //        How many steps to reach 1? Each step: if n is even → n / 2,
 //        otherwise → 3 * n + 1.   collatz_steps(6) == 8
+//        (Parameters are immutable too. Write `mut n: u64` to change n.)
 //
 //   ⚔️  HEAD 3: `sum_of_multiples(limit: u32) -> u32`
 //        Sum of all numbers BELOW `limit` divisible by 3 or 5.

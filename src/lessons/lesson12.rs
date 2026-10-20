@@ -195,8 +195,9 @@ pub const LESSON: Lesson = Lesson {
                  { /* build a BTreeMap for t */ })).collect(); /* merge each h.join().unwrap() */ })`",
                 "Head 2: two `mpsc::channel()`s. Stage 1 owns `tx_a`, stage 2 owns `rx_a` + `tx_b`. \
                  Both loops end because each sender is moved into a thread that finishes.",
-                "Head 3: per worker, `loop { let job = queue.lock().unwrap().pop(); let Some(j) = job \
-                 else { break }; results.lock().unwrap().push(j * 2); }`. Finally sort a clone of the results.",
+                "Head 3: per worker, `loop { let job = queue.lock().unwrap().pop(); match job { \
+                 Some(j) => results.lock().unwrap().push(j * 2), None => break } }`. \
+                 Finally sort a clone of the results.",
                 "Head 4: spawn with an owned String: `let s = input.to_string(); thread::spawn(move || \
                  s.parse::<u64>().map_err(|_| format!(\"bad input: {s}\")))`. Then join IN ORDER \
                  and use `?` on each result.",

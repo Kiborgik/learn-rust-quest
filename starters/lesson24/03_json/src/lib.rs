@@ -22,6 +22,9 @@
 //
 //     (StatusCode::CREATED, [(header::LOCATION, "/heroes/1")], Json(hero))
 //
+//   The easy return type for a tuple like that: `-> impl IntoResponse`
+//   (the trait from 24-1, imported from `axum::response`).
+//
 //   ⚠️ An extractor that reads the BODY (Json, String) must be the LAST
 //   argument. The body can only be read once.
 //

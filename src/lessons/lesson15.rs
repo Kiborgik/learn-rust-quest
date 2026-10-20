@@ -130,8 +130,8 @@ pub const LESSON: Lesson = Lesson {
             xp: 175,
             hints: &[
                 "`save[\"party\"][0][\"name\"].as_str()`. Missing keys give Null, then None.",
-                "`save[\"party\"].as_array().map_or(0, |p| p.iter().map(|h| h[\"gold\"].as_u64() \
-                 .unwrap_or(0)).sum())`",
+                "`match save[\"party\"].as_array() { Some(p) => p.iter().map(|h| \
+                 h[\"gold\"].as_u64().unwrap_or(0)).sum(), None => 0 }`",
                 "`json!({ \"event\": kind, \"xp\": xp })`",
             ],
             quiz: Some(Quiz {

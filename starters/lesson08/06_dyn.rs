@@ -50,7 +50,7 @@ struct Owl {
 }
 
 impl Mask for Fox {
-    fn describe(&self) -> String { "a sly fox".into() }
+    fn describe(&self) -> String { String::from("a sly fox") }
     fn charm(&self) -> u32 { 7 }
 }
 impl Mask for Owl {

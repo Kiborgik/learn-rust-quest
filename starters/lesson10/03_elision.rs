@@ -27,6 +27,10 @@
 //   Fix: say that the output comes from `word`:
 //         fn find<'w>(&self, word: &'w str) -> &'w str { word }
 //
+//   `self` can carry a named lifetime too. If the output may come from
+//   self OR a parameter, give both the same one:
+//         fn pick<'a>(&'a self, other: &'a str) -> &'a str { .. }
+//
 // 🎯 YOUR TASK
 //
 //   Three functions. For each one, decide: does it compile without

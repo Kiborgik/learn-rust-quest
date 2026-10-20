@@ -36,6 +36,7 @@
 //        hp + 10            // ✘ compile error if the compiler can see it,
 //                           //   otherwise a PANIC at runtime (debug builds)
 //        hp.saturating_add(10)   // 255  (stops at the max)
+//        hp.saturating_mul(2)    // 255  (same for *, and saturating_sub for -)
 //        hp.wrapping_add(10)     // 4    (wraps around, like C)
 //
 //   3. `as` NEVER FAILS, it can silently lose data:

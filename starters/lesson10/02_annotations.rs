@@ -16,6 +16,11 @@
 //     }
 //
 //   Read it as: "the result is valid as long as BOTH inputs are valid".
+//
+//   An input that the result never borrows from needs no `'a`:
+//
+//     fn first_of<'a>(a: &'a str, _b: &str) -> &'a str { a }
+//
 //   Lifetimes DESCRIBE relationships; they never make anything live
 //   longer. For callers this means:
 //

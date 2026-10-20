@@ -125,7 +125,8 @@ pub const LESSON: Lesson = Lesson {
                 "`let c = HIT.captures(line)?; Some(Hit { hero: c[\"hero\"].into(), foe: c[\"foe\"].into(), \
                  damage: c[\"dmg\"].parse().ok()? })`",
                 "fill: `VAR.replace_all(template, |c: &Captures| ...).into_owned()`",
-                "In the closure: `vars.get(&c[\"key\"]).cloned().unwrap_or_else(|| c[0].to_string())`",
+                "In the closure: `match vars.get(&c[\"key\"]) { Some(v) => v.clone(), \
+                 None => c[0].to_string() }`",
             ],
             quiz: Some(Quiz {
                 question: "`re.replace_all(text, \"x\")` returns a `Cow<str>`. Why not String?",
@@ -177,7 +178,7 @@ pub const LESSON: Lesson = Lesson {
             hints: &[
                 "Pattern: `r\"\\[r(?<round>\\d+)\\] (?<hero>\\w+) hits (?<foe>\\w+) for (?<dmg>\\d+)(?<crit> \\(crit\\))?\"` \
                  and `crit: c.name(\"crit\").is_some()`.",
-                "by hero: sum into a HashMap or use `into_grouping_map`, then \
+                "by hero: sum into a HashMap, then \
                  `.sorted_by(|a, b| b.1.cmp(&a.1).then(a.0.cmp(&b.0)))`.",
                 "per round: `&hits.iter().chunk_by(|h| h.round)` then sum each run's damage.",
                 "report: reuse the other functions. `rounds` = damage_per_round(...).len().",

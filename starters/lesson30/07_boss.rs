@@ -21,6 +21,8 @@
 //        "Iron Crabs: Ferris, Lumi" ("Iron Crabs:" when empty), and
 //        `"...".parse::<Roster>()` reads it back (max_size 10). No colon,
 //        or a blank guild name → BadFormat(the input).
+//        `parse()` works for any type with `impl FromStr` (std::str):
+//        it calls your `from_str` and returns its Result.
 //
 //   ⚔️  HEAD 5: RosterError messages (it already implements Error, so
 //        `?` turns it into Box<dyn Error>):

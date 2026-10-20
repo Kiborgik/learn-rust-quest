@@ -187,7 +187,8 @@ pub const LESSON: Lesson = Lesson {
             xp: 250,
             hints: &[
                 "Read the tests at the bottom: they show the exact function names, \
-                 parameter types and expected results.",
+                 parameter types and expected results. No `if` or loops needed: \
+                 each body is one expression.",
                 "`level % 5 == 0` is already a `bool`. Fahrenheit: `c * 1.8 + 32.0` \
                  (float literals need the `.0`).",
                 "hp_percent: multiply FIRST, then divide, then cast: \

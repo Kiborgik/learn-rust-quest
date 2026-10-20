@@ -16,6 +16,15 @@
 //     [3, 1, 2].iter().sorted_by_key(|x| ...)   // sort by a key
 //     v.iter().k_smallest(3)                    // the 3 smallest, cheaply
 //
+//   Your own order: `sorted_by` takes a compare function. `a.cmp(&b)`
+//   gives an `Ordering` (Less, Equal or Greater); `.then(..)` breaks
+//   ties:
+//
+//     [3, 1, 2].iter().sorted_by(|a, b| b.cmp(a))   // 3, 2, 1
+//     heroes.iter().sorted_by(|a, b| {
+//         b.level.cmp(&a.level).then(a.name.cmp(&b.name))
+//     })                    // highest level first, ties by name A→Z
+//
 //   Compare with plain std:
 //
 //     let mut v: Vec<_> = items.iter().collect();

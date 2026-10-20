@@ -27,6 +27,18 @@
 //     hits.fetch_add(1, Ordering::Relaxed);   // works through &, from any thread
 //     hits.load(Ordering::Relaxed);
 //
+//   Spawning in a loop: each closure must OWN its loop variable, so
+//   use `move`. To still BORROW something, move a REFERENCE in:
+//
+//     thread::scope(|s| {
+//         for word in ["a", "bb", "ccc"] {
+//             let hits = &hits;         // a reference, not the atomic
+//             s.spawn(move || {         // moves `word` and `hits`
+//                 hits.fetch_add(word.len() as u32, Ordering::Relaxed);
+//             });
+//         }
+//     });                // no join needed: the scope joins them all
+//
 // 🎯 YOUR TASK
 //
 //   1. `parallel_sum`: fix it to use `thread::scope` so the threads can

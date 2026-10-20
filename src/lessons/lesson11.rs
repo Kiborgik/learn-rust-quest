@@ -25,7 +25,8 @@ pub const LESSON: Lesson = Lesson {
                  count_numbers(b), Neg(x) => count_numbers(x)`",
             ],
             quiz: Some(Quiz {
-                question: "What is `std::mem::size_of::<Box<[u8; 1000]>>()` on a 64-bit machine?",
+                question: "`std::mem::size_of::<T>()` gives the size of a type in bytes. \
+                           What is `std::mem::size_of::<Box<[u8; 1000]>>()` on a 64-bit machine?",
                 options: &["1000", "8", "1008", "0"],
                 answer: 1,
                 explain: "A Box is just a pointer (8 bytes). The 1000 bytes live on the heap.",

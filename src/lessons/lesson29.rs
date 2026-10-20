@@ -101,7 +101,8 @@ pub const LESSON: Lesson = Lesson {
             xp: 175,
             hints: &[
                 "desc: `let (a, b) = unsafe { (*(a as *const i32), *(b as *const i32)) }; b.cmp(&a) as c_int`",
-                "by_level_then_id: cast to `*const Hero`, then `(a.level, a.id).cmp(&(b.level, b.id)) as c_int`.",
+                "by_level_then_id: cast to `*const Hero`, then \
+                 `a.level.cmp(&b.level).then(a.id.cmp(&b.id)) as c_int`.",
                 "sort_heroes: like sort_desc, with `size_of::<Hero>()` and your comparator.",
             ],
             quiz: Some(Quiz {

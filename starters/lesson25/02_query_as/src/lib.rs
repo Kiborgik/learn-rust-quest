@@ -19,6 +19,9 @@
 //     .fetch_one(&pool)       → T             (no row = Err(RowNotFound))
 //     .fetch_optional(&pool)  → Option<T>     (no row = Ok(None))
 //
+//   `sqlx::raw_sql(sql)` runs a string of SEVERAL statements at once,
+//   with no binds. The `seeded()` helper below uses it to build tables.
+//
 //   (sqlx also has `query!` / `query_as!` macros that check your SQL
 //   against a real database at compile time. They need a DATABASE_URL
 //   while building, so this lesson uses the plain functions.)

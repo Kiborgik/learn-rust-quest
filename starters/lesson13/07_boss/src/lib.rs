@@ -30,6 +30,15 @@
 //   Tips: `text.split_once('d')`, `str::parse::<u32>()`, and for the bonus
 //   look for '+' or '-' with `find`. `map_err` turns a parse error into
 //   your own error.
+//
+//     "2d6+3".find(['+', '-'])     // Some(3): the first '+' or '-'
+//
+//   Collecting Results: `collect` can build a `Result<Vec<_>, _>`. You
+//   get Ok(all the values), or the FIRST Err. Like `?` in a loop:
+//
+//     let nums: Result<Vec<u32>, _> =
+//         ["1", "2"].iter().map(|s| s.parse::<u32>()).collect();
+//     // Ok(vec![1, 2]);  with "x" in the list: Err(...)
 
 pub mod dice;
 pub mod notation;
